@@ -12,6 +12,7 @@ class model
 	protected $resultset;
 	protected $data;
 	protected $rows;
+	private static $config;
 
 	public function __construct(array $data = null)
 	{
@@ -20,9 +21,18 @@ class model
 		}
 	}
 
-	private function connect(array $config)
+	public static function config(array $data)
+	{
+		static::$config = $data;
+	}
+
+	private function connect()
 	{
 		if (!static::$connection) {
+			if (!is_array($config = static::$config)) {
+				throw new \BadMethodCallException('Database connection data not set');
+			}
+
 			static::$connection = new PDO(
 				"{$config['db-type']}:" .
 				"user={$config['db-user']} " .
