@@ -12,7 +12,7 @@ class model
 	protected $resultset;
 	protected $data;
 	protected $rows;
-	private static $config;
+	protected static $config;
 
 	public function __construct(array $data = null)
 	{
