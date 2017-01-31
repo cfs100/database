@@ -145,5 +145,10 @@ class model
 		$data = $this->get($field);
 		return $data ? json_decode($data, $asArray) : false;
 	}
+
+	public function lastInsertId()
+	{
+		return static::$connection ? static::$connection->lastInsertId() : false;
+	}
 }
 
