@@ -75,7 +75,18 @@ class paginator
 			return $this;
 		}
 
-		return $this->model->query("SELECT * FROM ($sql) T OFFSET {$offset} LIMIT {$this->config['items']}");
+		$class = get_class($this->model);
+		switch ($class::dbType()) {
+			case 'pgsql':
+				$limit = "OFFSET {$offset} LIMIT {$this->config['items']}";
+				break;
+			case 'mysql':
+			default:
+				$limit = "LIMIT {$offset}, {$this->config['items']}";
+				break;
+		}
+
+		return $this->model->query("SELECT * FROM ($sql) T {$limit}");
 	}
 
 	public function __call($name, $arguments)

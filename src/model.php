@@ -150,5 +150,10 @@ class model
 	{
 		return static::$connection ? static::$connection->lastInsertId() : false;
 	}
+
+	public static function dbType()
+	{
+		return is_array(static::$config) ? static::$config['db-type'] : null;
+	}
 }
 
