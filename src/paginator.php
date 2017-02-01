@@ -58,6 +58,7 @@ class paginator
 		$this->model->query("SELECT COUNT(*) AS total FROM ($sql) T");
 		$this->total = $this->fetch() ? (integer) $this->get('total') : 0;
 		$this->pages = (integer) ceil($this->total() / $this->config['items']);
+		$this->model->reset();
 
 		$page = (integer) $this->config['page'];
 
