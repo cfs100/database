@@ -50,6 +50,8 @@ class model
 		switch (gettype($value)) {
 			case 'boolean':
 				return $value ? 'true' : 'false';
+			case 'NULL':
+				return 'null';
 			case 'integer':
 			case 'double':
 				return $value;
