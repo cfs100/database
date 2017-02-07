@@ -96,6 +96,10 @@ class model
 			$this->fetchAll();
 		}
 
+		if (is_null($this->resultset)) {
+			return false;
+		}
+
 		if (is_null($this->data)) {
 			$data = current($this->resultset);
 		} else {
