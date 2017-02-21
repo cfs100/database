@@ -37,7 +37,8 @@ class model
 				"{$config['db-type']}:" .
 				"dbname={$config['db-name']};" .
 				"host={$config['db-host']};" .
-				"port={$config['db-port']}"
+				"port={$config['db-port']};" .
+				"charset={$config['charset']}"
 			, $config['db-user'], $config['db-pass']);
 			static::$connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
 		}
