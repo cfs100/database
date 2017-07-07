@@ -98,4 +98,9 @@ class update
 	{
 		return $this->where($condition, 'OR');
 	}
+
+	public function execute()
+	{
+		return $this->model->exec($this);
+	}
 }

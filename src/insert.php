@@ -85,4 +85,9 @@ class insert
 		}
 		return $this;
 	}
+
+	public function execute()
+	{
+		return $this->model->exec($this);
+	}
 }
