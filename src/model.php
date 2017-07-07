@@ -162,5 +162,10 @@ class model
 	{
 		return is_array(static::$config) ? static::$config['db-type'] : null;
 	}
+
+	public function insert()
+	{
+		return new insert($this);
+	}
 }
 
