@@ -167,5 +167,10 @@ class model
 	{
 		return new insert($this);
 	}
+
+	public function update()
+	{
+		return new update($this);
+	}
 }
 
