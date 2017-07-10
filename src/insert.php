@@ -15,7 +15,7 @@ class insert
 	{
 		$this->model = $model;
 		$this->originalTable = preg_replace('<^.*\\\>', '', get_class($model));
-		$this->table($this->originalTable);
+		$this->into($this->originalTable);
 	}
 
 	public function __toString()
@@ -46,13 +46,13 @@ class insert
 	public function reset()
 	{
 		$this->data = [];
-		$this->table($this->originalTable);
+		$this->into($this->originalTable);
 		$this->replace = false;
 		$this->ignore = false;
 		return $this;
 	}
 
-	public function table($name)
+	public function into($name)
 	{
 		if (!empty($name)) {
 			$this->table = (string) $name;
