@@ -172,5 +172,10 @@ class model
 	{
 		return new update($this);
 	}
+
+	public function select($expressions = ['*'])
+	{
+		return new select($this, $expressions);
+	}
 }
 
