@@ -14,16 +14,12 @@ class delete
 	{
 		$this->model = $model;
 		$this->originalTable = preg_replace('<^.*\\\>', '', get_class($model));
-		$this->table($this->originalTable);
+		$this->from($this->originalTable);
 	}
 
 	public function __toString()
 	{
 		$sql = '';
-
-		if (empty($this->data)) {
-			return $sql;
-		}
 
 		$sql = 'DELETE ';
 		if ($this->ignore) {
@@ -44,7 +40,7 @@ class delete
 
 	public function reset()
 	{
-		$this->table($this->originalTable);
+		$this->from($this->originalTable);
 		$this->ignore = false;
 		return $this;
 	}
