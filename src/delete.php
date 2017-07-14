@@ -49,7 +49,7 @@ class delete
 		return $this;
 	}
 
-	public function table($name)
+	public function from($name)
 	{
 		if (!empty($name)) {
 			$this->table = (string) $name;
