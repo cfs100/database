@@ -33,12 +33,23 @@ class model
 				throw new \BadMethodCallException('Database connection data not set');
 			}
 
+			$options = [];
+
+			if (isset($config['db-name'])) {
+				$options[] = "dbname={$config['db-name']}";
+			}
+			if (isset($config['db-host'])) {
+				$options[] = "host={$config['db-host']}";
+			}
+			if (isset($config['db-port'])) {
+				$options[] = "port={$config['db-port']}";
+			}
+			if (isset($config['charset'])) {
+				$options[] = "charset={$config['charset']}";
+			}
+
 			static::$connection = new PDO(
-				"{$config['db-type']}:" .
-				"dbname={$config['db-name']};" .
-				"host={$config['db-host']};" .
-				"port={$config['db-port']};" .
-				"charset={$config['charset']}"
+				$config['db-type'] . (!empty($options) ? ':' . implode(';', $options) : null)
 			, $config['db-user'], $config['db-pass']);
 			static::$connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
 		}
