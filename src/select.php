@@ -44,7 +44,11 @@ class select
 			$sql .= $index !== 0 ? ', ' : null;
 
 			$aux = $this->identifier($expression);
-			$sql .= $aux !== $expression ? "{$this->identifier($this->table)}.{$aux}" : $aux;
+			if ($aux === '*' || $aux !== $expression) {
+				$aux = "{$this->identifier($this->table)}.{$aux}";
+			}
+
+			$sql .= $aux;
 		}
 
 		$sql .= " FROM {$this->identifier($this->table)}";
