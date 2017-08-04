@@ -13,11 +13,16 @@ class model
 	protected $data;
 	protected $rows;
 	protected static $config;
+	protected $debugger;
 
 	public function __construct(array $data = null)
 	{
 		if (!empty($data)) {
 			$this->data($data);
+		}
+
+		if (class_exists('\\debugger\\instance')) {
+			$this->debugger = new \debugger\instance(static::class);
 		}
 	}
 
@@ -30,7 +35,13 @@ class model
 	{
 		if (!static::$connection) {
 			if (!is_array($config = static::$config)) {
-				throw new \BadMethodCallException('Database connection data not set');
+				$error = 'Database connection data not set';
+
+				if ($this->debugger) {
+					$this->debugger->error($error);
+				}
+
+				throw new \BadMethodCallException($error);
 			}
 
 			$options = [];
@@ -74,21 +85,47 @@ class model
 
 	public function exec($sql)
 	{
+		if ($this->debugger) {
+			$this->debugger->log((string) $sql);
+		}
+
 		$aux = $this->connect()->exec($sql);
 		if ($aux === false) {
-			throw new \Exception($this->connect()->errorInfo()[2], 500);
+			$info = $this->connect()->errorInfo();
+
+			if ($this->debugger) {
+				$this->debugger->error($info);
+			}
+
+			throw new \Exception($info()[2], 500);
 		}
+
+		if ($this->debugger) {
+			$this->debugger->info("Rows affected: {$aux}");
+		}
+
 		return $aux;
 	}
 
 	public function query($sql)
 	{
+		if ($this->debugger) {
+			$this->debugger->log((string) $sql);
+		}
+
 		$this->statement = $this->reset()->connect()->query($sql);
-		if ($this->statement) {
-			$this->rows = $this->statement->rowCount();
-		} else {
+
+		if (!$this->statement) {
+			$this->debugger->error($this->connect()->errorInfo());
 			throw new \Exception($this->connect()->errorInfo()[2], 500);
 		}
+
+		$this->rows = $this->statement->rowCount();
+
+		if ($this->debugger) {
+			$this->debugger->info("Rows returned: {$this->rows}");
+		}
+
 		return $this;
 	}
 

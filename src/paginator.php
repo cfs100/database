@@ -16,11 +16,17 @@ class paginator
 	private $total;
 	private $pages;
 
+	private $debugger;
+
 	public function __construct(model $model, array $options = [])
 	{
 		$this->model = $model;
 		foreach (static::$options as $key => $default) {
 			$this->config[$key] = isset($options[$key]) ? $options[$key] : $default;
+		}
+
+		if (class_exists('\\debugger\\instance')) {
+			$this->debugger = new \debugger\instance(static::class);
 		}
 	}
 
@@ -68,12 +74,20 @@ class paginator
 			$page = $this->pages();
 		}
 
+		if ($this->debugger) {
+			$this->debugger->info("Total items: {$this->total}");
+		}
+
 		$this->config['page'] = $page;
 
 		$offset = !$this->config['offset'] ? ($page - 1) * $this->config['items'] : 0;
 
 		if ($this->total == 0) {
 			return $this;
+		}
+
+		if ($this->debugger) {
+			$this->debugger->info("Page: {$page}/{$this->pages}");
 		}
 
 		$class = get_class($this->model);
