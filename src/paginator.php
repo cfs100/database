@@ -90,6 +90,11 @@ class paginator
 		return $this->model->query("SELECT * FROM ($sql) T {$limit}");
 	}
 
+	public function select($expressions = ['*'])
+	{
+		return new select($this, $expressions);
+	}
+
 	public function __call($name, $arguments)
     {
     	return call_user_func_array([$this->model, $name], $arguments);

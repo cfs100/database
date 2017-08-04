@@ -16,13 +16,23 @@ class select
 	private $order = [];
 	private $limit = null;
 
-	public function __construct(model $model, $expressions = ['*'])
+	public function __construct($model, $expressions = ['*'])
 	{
+		$realModel = false;
+
+		if (is_a($model, '\\database\\paginator')) {
+			$realModel = $model->model();
+		} elseif (is_a($model, '\\database\\model')) {
+			$realModel = $model;
+		} else {
+			throw new \BadMethodCallException('Unable to create a SELECT instance using a ' . get_class($model));
+		}
+
 		foreach ($expressions as $expression) {
 			$this->field($expression);
 		}
 		$this->model = $model;
-		$this->originalTable = preg_replace('<^.*\\\>', '', get_class($model));
+		$this->originalTable = preg_replace('<^.*\\\>', '', get_class($realModel));
 		$this->from($this->originalTable);
 	}
 
