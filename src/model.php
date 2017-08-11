@@ -97,7 +97,7 @@ class model
 				$this->debugger->error($info);
 			}
 
-			throw new \Exception($info()[2], 500);
+			throw new \Exception($info[2], 500);
 		}
 
 		if ($this->debugger) {
