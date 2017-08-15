@@ -122,11 +122,38 @@ class model
 
 		$this->rows = $this->statement->rowCount();
 
-		if ($this->debugger) {
-			$this->debugger->info("Rows returned: {$this->rows}");
+		return $this;
+	}
+
+	public function nextRowset()
+	{
+		$this->data = null;
+
+		if (!is_array($this->resultset)) {
+			return null;
 		}
 
-		return $this;
+		$rowset = next($this->resultset);
+		$this->rows = $rowset ? count($rowset) : false;
+
+		if ($this->debugger) {
+			$this->debugger->log('Next rowset... ' . ($this->rows() === false ? 'no more rowsets' : "{$this->rows} row" . ($this->rows > 1 ? 's' : null)));
+		}
+
+		if (!$rowset) {
+			reset($this->resultset);
+		}
+
+		return (boolean) $rowset;
+	}
+
+	protected function _nextRowset()
+	{
+		if (!$this->statement) {
+			return null;
+		}
+
+		return $this->statement->nextRowset();
 	}
 
 	public function reset()
@@ -143,19 +170,25 @@ class model
 		$data = false;
 		if (!is_array($this->resultset)) {
 			$this->fetchAll();
+
+			if ($this->debugger) {
+				$this->debugger->info("Rows returned: {$this->rows}");
+			}
 		}
 
 		if (is_null($this->resultset)) {
 			return false;
 		}
 
+		$rowset = key($this->resultset);
+
 		if (is_null($this->data)) {
-			$data = current($this->resultset);
+			$data = current($this->resultset[$rowset]);
 		} else {
-			$data = next($this->resultset);
+			$data = next($this->resultset[$rowset]);
 			if (!$data) {
 				$this->data = null;
-				reset($this->resultset);
+				reset($this->resultset[$rowset]);
 			}
 		}
 
@@ -174,7 +207,11 @@ class model
 	public function fetchAll()
 	{
 		if (is_object($this->statement)) {
-			$this->resultset = $this->statement->fetchAll();
+			$this->resultset = [];
+			do {
+				$this->resultset[] = $this->statement->fetchAll();
+			} while ($this->_nextRowset());
+			reset($this->resultset);
 		}
 
 		return $this->resultset;
