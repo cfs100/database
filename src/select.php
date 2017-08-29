@@ -52,13 +52,7 @@ class select
 
 		foreach ($this->expressions as $index => $expression) {
 			$sql .= $index !== 0 ? ', ' : null;
-
-			$aux = $this->identifier($expression);
-			if ($aux === '*' || $aux !== $expression) {
-				$aux = "{$this->identifier($this->table)}.{$aux}";
-			}
-
-			$sql .= $aux;
+			$sql .= $this->identifier($expression, $this->table);
 		}
 
 		$sql .= " FROM {$this->identifier($this->table)}";
@@ -145,7 +139,7 @@ class select
 		];
 
 		foreach ($fields as $field) {
-			$this->field("{$this->identifier($table)}.{$this->identifier($field)}");
+			$this->field($this->identifier($field, $table));
 		}
 		return $this;
 	}
@@ -214,9 +208,17 @@ class select
 		return $this;
 	}
 
-	protected function identifier($name)
+	protected function identifier($name, $table = null)
 	{
-		return preg_match('<^[a-z0-9$_]+$>i', $name) ? "`{$name}`" : $name;
+		$identifier = preg_match('<^[a-z0-9$_]+$>i', $name) ? "`{$name}`" : $name;
+
+		if (($table = trim($table))) {
+			if ($identifier === '*' || $identifier !== $name || !preg_match('<[)(`]>', $identifier)) {
+				$identifier = "{$this->identifier($table)}.{$identifier}";
+			}
+		}
+
+		return $identifier;
 	}
 
 	public function execute()
