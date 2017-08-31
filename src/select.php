@@ -213,7 +213,7 @@ class select
 		$identifier = preg_match('<^[a-z0-9$_]+$>i', $name) ? "`{$name}`" : $name;
 
 		if (($table = trim($table))) {
-			if ($identifier === '*' || $identifier !== $name || !preg_match('<[)(`]>', $identifier)) {
+			if ($identifier === '*' || $identifier !== $name || !preg_match('<[)(`.]>', $identifier)) {
 				$identifier = "{$this->identifier($table)}.{$identifier}";
 			}
 		}
