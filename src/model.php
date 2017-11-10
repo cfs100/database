@@ -209,7 +209,7 @@ class model
 		if (is_object($this->statement)) {
 			$this->resultset = [];
 			do {
-				$this->resultset[] = $this->statement->fetchAll();
+				$this->resultset[] = $this->statement->fetchAll(\PDO::FETCH_ASSOC);
 			} while ($this->_nextRowset());
 			reset($this->resultset);
 		}
