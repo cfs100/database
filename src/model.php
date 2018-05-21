@@ -63,6 +63,7 @@ class model
 				$config['db-type'] . (!empty($options) ? ':' . implode(';', $options) : null)
 			, $config['db-user'], $config['db-pass']);
 			static::$connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+			static::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}
 
 		return static::$connection;
@@ -153,7 +154,15 @@ class model
 			return null;
 		}
 
-		return $this->statement->nextRowset();
+		try {
+			return $this->statement->nextRowset();
+		} catch (\Throwable $e) {
+			if ($e->getCode() != 'IM001') {
+				throw $e;
+			}
+		}
+
+		return false;
 	}
 
 	public function reset()
