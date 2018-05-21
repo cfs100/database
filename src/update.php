@@ -31,7 +31,7 @@ class update
 			$sql .= 'IGNORE ';
 		}
 
-		$sql .= "`{$this->table}` SET ";
+		$sql .= (model::$crass ? "`{$this->table}`" : $this->table) . ' SET ';
 		$sql .= implode(', ', $this->data);
 
 		if (!empty($this->where)) {
@@ -68,7 +68,7 @@ class update
 
 	public function field($name, $value, $quote = true)
 	{
-		$this->data[] = "`{$name}` = " . ($quote ? $this->model->quote($value) : $value);
+		$this->data[] = (model::$crass ? "`{$name}`" : $name) . ' = ' . ($quote ? $this->model->quote($value) : $value);
 		return $this;
 	}
 

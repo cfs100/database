@@ -26,7 +26,8 @@ class delete
 			$sql .= 'IGNORE ';
 		}
 
-		$sql .= "FROM `{$this->table}`";
+		$sql .= 'FROM ';
+		$sql .= model::$crass ? "`{$this->table}`" : $this->table;
 
 		if (!empty($this->where)) {
 			foreach ($this->where as $index => $where) {

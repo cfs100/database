@@ -35,7 +35,9 @@ class insert
 			}
 		}
 
-		$sql .= "INTO `{$this->table}` (";
+		$sql .= 'INTO ';
+		$sql .= model::$crass ? "`{$this->table}`" : $this->table;
+		$sql .= ' (';
 		$sql .= implode(', ', array_keys($this->data));
 		$sql .= ') VALUES (';
 		$sql .= implode(', ', $this->data);
@@ -74,7 +76,7 @@ class insert
 
 	public function field($name, $value, $quote = true)
 	{
-		$this->data["`{$name}`"] = $quote ? $this->model->quote($value) : $value;
+		$this->data[(model::$crass ? "`{$name}`" : $name)] = $quote ? $this->model->quote($value) : $value;
 		return $this;
 	}
 

@@ -210,7 +210,7 @@ class select
 
 	protected function identifier($name, $table = null)
 	{
-		$identifier = preg_match('<^[a-z0-9$_]+$>i', $name) ? "`{$name}`" : $name;
+		$identifier = model::$crass && preg_match('<^[a-z0-9$_]+$>i', $name) ? "`{$name}`" : $name;
 
 		if (($table = trim($table))) {
 			if ($identifier === '*' || $identifier !== $name || !preg_match('<[)(`.]>', $identifier)) {

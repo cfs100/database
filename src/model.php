@@ -7,6 +7,7 @@ use \PDO;
 class model
 {
 	protected static $connection;
+	public static $crass = true;
 
 	protected $statement;
 	protected $resultset;
@@ -62,8 +63,13 @@ class model
 			static::$connection = new PDO(
 				$config['db-type'] . (!empty($options) ? ':' . implode(';', $options) : null)
 			, $config['db-user'], $config['db-pass']);
+
 			static::$connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
 			static::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+			if ($config['db-type'] == 'pgsql') {
+				static::$crass = false;
+			}
 		}
 
 		return static::$connection;
