@@ -242,6 +242,17 @@ class model
 		return $this->data;
 	}
 
+	public function set($field, $value)
+	{
+		if (is_null($this->data)) {
+			$this->data = [];
+		}
+
+		$this->data[$field] = $value;
+
+		return $this;
+	}
+
 	public function get($field)
 	{
 		return isset($this->data[$field]) ? $this->data[$field] : null;
