@@ -4,12 +4,12 @@ namespace database;
 
 class insert
 {
-	private $model;
-	private $table;
-	private $originalTable;
-	private $replace = false;
-	private $ignore = false;
-	private $data = [];
+	protected $model;
+	protected $table;
+	protected $originalTable;
+	protected $replace = false;
+	protected $ignore = false;
+	protected $data = [];
 
 	public function __construct(model $model)
 	{

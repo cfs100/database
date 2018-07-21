@@ -10,13 +10,13 @@ class paginator
 		'offset' => 0,
 	];
 
-	private $model;
-	private $config = [];
+	protected $model;
+	protected $config = [];
 
-	private $total;
-	private $pages;
+	protected $total;
+	protected $pages;
 
-	private $debugger;
+	protected $debugger;
 
 	public function __construct(model $model, array $options = [])
 	{

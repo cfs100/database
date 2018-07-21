@@ -4,17 +4,17 @@ namespace database;
 
 class select
 {
-	private $model;
-	private $table;
-	private $originalTable;
-	private $flags = [];
-	private $expressions = [];
-	private $where = [];
-	private $join = [];
-	private $group = [];
-	private $having = [];
-	private $order = [];
-	private $limit = null;
+	protected $model;
+	protected $table;
+	protected $originalTable;
+	protected $flags = [];
+	protected $expressions = [];
+	protected $where = [];
+	protected $join = [];
+	protected $group = [];
+	protected $having = [];
+	protected $order = [];
+	protected $limit = null;
 
 	public function __construct($model, $expressions = ['*'])
 	{

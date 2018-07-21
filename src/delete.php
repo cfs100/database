@@ -4,11 +4,11 @@ namespace database;
 
 class delete
 {
-	private $model;
-	private $table;
-	private $originalTable;
-	private $ignore = false;
-	private $where = [];
+	protected $model;
+	protected $table;
+	protected $originalTable;
+	protected $ignore = false;
+	protected $where = [];
 
 	public function __construct(model $model)
 	{

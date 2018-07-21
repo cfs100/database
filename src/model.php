@@ -32,7 +32,7 @@ class model
 		static::$config = $data;
 	}
 
-	private function connect()
+	protected function connect()
 	{
 		if (!static::$connection) {
 			if (!is_array($config = static::$config)) {

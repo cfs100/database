@@ -4,12 +4,12 @@ namespace database;
 
 class update
 {
-	private $model;
-	private $table;
-	private $originalTable;
-	private $ignore = false;
-	private $data = [];
-	private $where = [];
+	protected $model;
+	protected $table;
+	protected $originalTable;
+	protected $ignore = false;
+	protected $data = [];
+	protected $where = [];
 
 	public function __construct(model $model)
 	{
