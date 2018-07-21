@@ -62,7 +62,13 @@ class select
 				if ($join['type']) {
 					$sql .= " {$join['type']}";
 				}
+
 				$sql .= " JOIN {$this->identifier($join['table'])}";
+
+				if ($join['alias']) {
+					$sql .= " AS {$this->identifier($join['alias'])}";
+				}
+
 				if ($join['condition']) {
 					$sql .= " ON {$join['condition']}";
 				}
@@ -132,14 +138,22 @@ class select
 
 	public function join($table, $condition = null, array $fields = ['*'], $type = null)
 	{
+		$alias = null;
+
+		if (is_array($table)) {
+			$alias = array_keys($table)[0];
+			$table = $table[$alias];
+		}
+
 		$this->join[] = [
 			'table' => $this->identifier($table),
+			'alias' => $this->identifier($alias),
 			'condition' => $condition,
 			'type' => $type,
 		];
 
 		foreach ($fields as $field) {
-			$this->field($this->identifier($field, $table));
+			$this->field($this->identifier($field, $alias ?: $table));
 		}
 		return $this;
 	}
