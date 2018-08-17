@@ -14,7 +14,9 @@ class select
 	protected $group = [];
 	protected $having = [];
 	protected $order = [];
-	protected $limit = null;
+	protected $limit;
+	protected $prevUnion;
+	protected $nextUnion;
 
 	public function __construct($model, $expressions = ['*'])
 	{
@@ -38,6 +40,15 @@ class select
 
 	public function __toString()
 	{
+		return $this->asString(true);
+	}
+
+	public function asString($tryUnion = false)
+	{
+		if ($tryUnion && $this->nextUnion) {
+			return (string) $this->nextUnion;
+		}
+
 		$sql = '';
 
 		if (empty($this->expressions) || empty($this->table)) {
@@ -103,6 +114,10 @@ class select
 
 		if (!is_null($this->limit)) {
 			$sql .= " LIMIT {$this->limit}";
+		}
+
+		if ($tryUnion && $this->prevUnion) {
+			$sql = "({$this->prevUnion->asString()}) UNION ({$sql})";
 		}
 
 		return $sql;
@@ -238,5 +253,16 @@ class select
 	public function execute()
 	{
 		return $this->model->query($this);
+	}
+
+	public function union()
+	{
+		return $this->nextUnion = new union($this->model, $this);
+	}
+
+	public function setPrevUnion(select $select)
+	{
+		$this->prevUnion = $select;
+		return $this;
 	}
 }
