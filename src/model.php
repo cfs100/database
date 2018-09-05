@@ -223,9 +223,10 @@ class model
 	{
 		if (is_object($this->statement)) {
 			$this->resultset = [];
-			do {
+			while ($this->statement->columnCount()) {
 				$this->resultset[] = $this->statement->fetchAll(\PDO::FETCH_ASSOC);
-			} while ($this->_nextRowset());
+				$this->_nextRowset();
+			}
 			reset($this->resultset);
 		}
 
