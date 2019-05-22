@@ -236,7 +236,10 @@ class model
 	public function data(array $data = null)
 	{
 		if (!is_null($data)) {
-			$this->data = $data;
+			$this->data = null;
+			foreach ($data as $field => $value) {
+				$this->set($field, $value);
+                        }
 			return $this;
 		}
 
