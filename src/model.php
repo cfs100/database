@@ -225,7 +225,10 @@ class model
 			$this->resultset = [];
 			while ($this->statement->columnCount()) {
 				$this->resultset[] = $this->statement->fetchAll(\PDO::FETCH_ASSOC);
-				$this->_nextRowset();
+
+				if (!$this->_nextRowset()) {
+					break;
+				}
 			}
 			reset($this->resultset);
 		}
